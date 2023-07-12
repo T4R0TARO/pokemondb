@@ -14,6 +14,18 @@
   -webkit-text-size-adjust: 100%;
 }
 
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 2rem;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -23,12 +35,13 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+h1,
+h2,
+h3,
+h4 {
+  text-align: center;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
 }
 
 h1 {
