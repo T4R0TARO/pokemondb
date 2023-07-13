@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useReducer,
+  useEffect,
+} from "react";
 
 const GlobalContext = createContext();
 const baseUrl = "https://pokeapi.co/api/v2/";
@@ -37,6 +43,26 @@ export const GlobalContextProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const [allPokemonData, setAllPokemonData] = useState([]);
+
+  // get all pokemon
+  const getAllPokemon = async () => {
+    dispatch({ type: ACTION.LOADING });
+    const res = await fetch(`${baseUrl}pokemon/?limit=20`);
+    const data = await res.json();
+    dispatch({ type: ACTION.GET_ALL_POKEMON, payload: data });
+
+    const allPokemonData = [];
+    for (const pokemon of data.results) {
+      const pokemonRes = await fetch(pokemon.url);
+      const pokemonData = await pokemonRes.json();
+      allPokemonData.push(pokemonData);
+    }
+    setAllPokemonData(allPokemonData);
+  };
+
+  useEffect(() => {
+    getAllPokemon();
+  }, []);
 
   return (
     <GlobalContext.Provider
