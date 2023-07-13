@@ -1,0 +1,55 @@
+/* ALLPOKEDATA STYLES */
+
+.AllPokeData {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+table button {
+  width: 100%;
+}
+
+table,
+td {
+  border: 1px solid #333;
+}
+
+td {
+  padding: 0 0.3rem;
+  text-transform: capitalize;
+}
+
+thead,
+tfoot {
+  background: #333;
+  color: #fff;
+}
+
+.sprite-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sprite-image img {
+  height: 80px;
+  width: 80px;
+}
+
+.types span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid lightgray;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-size: 11px;
+  width: 70px;
+  color: #fff;
+  font-weight: 700;
+}
