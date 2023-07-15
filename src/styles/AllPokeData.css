@@ -52,4 +52,5 @@ tfoot {
   width: 70px;
   color: #fff;
   font-weight: 700;
+  text-transform: capitalize;
 }

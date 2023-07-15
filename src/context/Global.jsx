@@ -51,6 +51,7 @@ export const GlobalContextProvider = ({ children }) => {
     const data = await res.json();
     dispatch({ type: ACTION.GET_ALL_POKEMON, payload: data });
 
+    // fetch pokemon obj data url
     const allPokemonData = [];
     for (const pokemon of data.results) {
       const pokemonRes = await fetch(pokemon.url);
@@ -58,6 +59,14 @@ export const GlobalContextProvider = ({ children }) => {
       allPokemonData.push(pokemonData);
     }
     setAllPokemonData(allPokemonData);
+  };
+
+  // get pokemon
+  const getPokemon = async (name) => {
+    dispatch({ type: ACTION.LOADING });
+    const response = await fetch(`${baseUrl}pokemon/${name}`);
+    const data = await response.json();
+    dispatch({ type: ACTION.GET_POKEMON, payload: data });
   };
 
   useEffect(() => {
@@ -69,6 +78,7 @@ export const GlobalContextProvider = ({ children }) => {
       value={{
         ...state,
         allPokemonData,
+        getPokemon,
       }}
     >
       {children}
