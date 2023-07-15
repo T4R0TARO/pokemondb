@@ -4,7 +4,6 @@ import "../styles/AllPokeData.css";
 
 function AllPokeData() {
   const { allPokemonData } = useGlobalContext();
-  console.log(allPokemonData);
 
   return (
     <div className="AllPokeData">
