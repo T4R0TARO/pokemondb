@@ -14,6 +14,8 @@ const ACTION = {
   SEARCH: "SEARCH",
   GET_ALL_POKEMON: "GET_ALL_POKEMON",
   GET_POKEMON: "GET_POKEMON",
+  GET_POKEMON_DATABASE: " GET_POKEMON_DATABASE",
+  NEXT: "NEXT",
 };
 
 const reducer = (state, action) => {
@@ -21,9 +23,23 @@ const reducer = (state, action) => {
     case ACTION.LOADING:
       return { ...state, loading: true };
     case ACTION.GET_ALL_POKEMON:
-      return { ...state, allPokemon: action.payload, loading: false };
+      return {
+        ...state,
+        allPokemon: action.payload.results,
+        next: action.payload.next,
+        loading: false,
+      };
     case ACTION.GET_POKEMON:
       return { ...state, pokemon: action.payload, loading: false };
+    case ACTION.GET_POKEMON_DATABASE:
+      return { ...state, pokemonDatabase: action.payload, loading: false };
+    case ACTION.NEXT:
+      return {
+        ...state,
+        allPokemon: [...state.allPokemon, ...action.payload.results],
+        next: action.payload.next,
+        loading: false,
+      };
     default:
       return state;
   }
@@ -34,7 +50,7 @@ export const GlobalContextProvider = ({ children }) => {
   const initialState = {
     loading: false,
     isSearch: false,
-    pokemonDataBase: [],
+    pokemonDatabase: [],
     searchResults: [],
     allPokemon: [],
     pokemon: {},
@@ -69,8 +85,34 @@ export const GlobalContextProvider = ({ children }) => {
     dispatch({ type: ACTION.GET_POKEMON, payload: data });
   };
 
+  // get all pokemon data
+  const getPokemonDatabase = async () => {
+    dispatch({ type: ACTION.LAODING });
+    const res = await fetch(`${baseUrl}pokemon?limit=100000&offset=0`);
+    const data = await res.json();
+    dispatch({ type: ACTION.GET_POKEMON_DATABASE, payload: data.results });
+  };
+
+  // next/load more data
+  const next = async () => {
+    dispatch({ type: ACTION.LOADING });
+    const res = await fetch(state.next);
+    const data = await res.json();
+    dispatch({ type: ACTION.NEXT, payload: data });
+
+    const newPokemonData = [];
+    for (const pokemon of data.results) {
+      const pokemonRes = await fetch(pokemon.url);
+      const pokemonData = await pokemonRes.json();
+      newPokemonData.push(pokemonData);
+    }
+    // add new pokemon data to the old pokemon data
+    setAllPokemonData([...allPokemonData, ...newPokemonData]);
+  };
+
   useEffect(() => {
     getAllPokemon();
+    getPokemonDatabase();
   }, []);
 
   return (
@@ -79,6 +121,7 @@ export const GlobalContextProvider = ({ children }) => {
         ...state,
         allPokemonData,
         getPokemon,
+        next,
       }}
     >
       {children}
