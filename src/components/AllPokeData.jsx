@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/AllPokeData.css";
 
 function AllPokeData() {
-  const { allPokemonData } = useGlobalContext();
+  const { allPokemonData, next } = useGlobalContext();
 
   return (
     <div className="AllPokeData">
@@ -111,6 +111,14 @@ function AllPokeData() {
           )}
         </tbody>
       </table>
+      {/* Load More Pokemon */}
+      <div className="next">
+        {allPokemonData.length > 0 && (
+          <button className="next-button" onClick={next}>
+            load more &darr;
+          </button>
+        )}
+      </div>
     </div>
   );
 }
