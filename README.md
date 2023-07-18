@@ -111,8 +111,65 @@ export const useGlobalContext = () => {
 
 ### Get Pokemon
 
-```jsx
+1.  fetch pokemon data
+2.  save data in state
+3.  pass state and f() in Global Provider
 
+```jsx
+// Global.jsx
+
+// code...
+export const GlobalContextProvider = ({ children }) => {
+  const initialState = {
+    // code...
+    pokemon: {},
+  };
+
+  // 1️⃣ get pokemon
+  const getPokemon = async (name) => {
+    dispatch({ type: ACTION.LOADING });
+    const response = await fetch(`${baseUrl}pokemon/${name}`);
+    const data = await response.json();
+    // 2️⃣ save data to state
+    dispatch({ type: ACTION.GET_POKEMON, payload: data });
+  };
+
+  // code ...
+
+  // 3️⃣ pass state to provider
+  return (
+    <GlobalContext.Provider
+      value={{
+        ...state,
+        allPokemonData,
+        getPokemon,
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
+};
+```
+
+4.  call f() when component renders
+
+```jsx
+// Pokemon.jsx
+
+function Pokemon() {
+  const { getPokemon, pokemon: pokemonItem, loading } = useGlobalContext();
+
+  // * hook returns an obj from the current URL taht were matched iby the <Route path>
+  const { name } = useParams();
+
+  // 4️⃣ call f() when component renders
+  // * call f() when param `name` changes
+  useEffect(() => {
+    getPokemon(name);
+  }, [name]);
+
+  return <div className="Pokemon">// code...</div>;
+}
 ```
 
 ---
