@@ -168,7 +168,7 @@ function Pokemon() {
     getPokemon(name);
   }, [name]);
 
-  return <div className="Pokemon">// code...</div>;
+  return <div className="Pokemon">{/*code...*/}</div>;
 }
 ```
 
@@ -176,8 +176,140 @@ function Pokemon() {
 
 ### Load More Data Button
 
-```jsx
+1. Create f() next to access current states `next`
+2. Update `ACTION.GET_ALL_POKEMON` to save next url
+3. Update `ACTION.NEXT` to save the prevState of `allPokemonData` and the newly fetched data
+4. Update `ACTION.NEXT` to save the new next url for the next 20 pokemon data
+5. next() should access state `next` and iterate through the items of the new data AND
+6. update `allPokemonData` by spreading its prevState and add the new items
 
+data
+
+```json
+-   count:1281
+-   next:"https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20" 👈
+-   previous:null
+-   results: [] 20 items
+```
+
+next data
+
+```json
+-   count:1281
+-   next:"https://pokeapi.co/api/v2/pokemon/?offset=60&limit=20" 👈
+-   previous:"https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20"
+-   results: [] 20 items
+```
+
+```jsx
+const ACTION = {
+  // code...
+  NEXT: "NEXT",
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    /**2️⃣ update action GET_ALL_POKEMON
+     * inital state `next` payload access obj key `next`
+     * `next.action.payload.next` save the url to the next 20 pokemon
+     */
+    case ACTION.GET_ALL_POKEMON:
+      return {
+        ...state,
+        allPokemon: action.payload.results,
+        next: action.payload.next,
+        loading: false,
+      };
+    /** update action NEXT
+     * 3️⃣initial state `allPokemon` spreads prevState `state.allPokemon` AND
+     * `...action.payload.results` spreads data from the current payload results
+     * 4️⃣`next:action.payload.next` updates state `next` with new url for next 20 pokemon
+     *
+     */
+    case ACTION.NEXT:
+      return {
+        ...state,
+        allPokemon: [...state.allPokemon, ...action.payload.results],
+        next: action.payload.next,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export const GlobalContextProvider = ({ children }) => {
+  const initialState = {
+    loading: false,
+    allPokemon: [],
+    next: "",
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [allPokemonData, setAllPokemonData] = useState([]);
+
+  // get all pokemon
+  const getAllPokemon = async () => {
+    dispatch({ type: ACTION.LOADING });
+    const res = await fetch(`${baseUrl}pokemon/?limit=20`);
+    const data = await res.json();
+    dispatch({ type: ACTION.GET_ALL_POKEMON, payload: data });
+
+    // fetch pokemon obj data url
+    const allPokemonData = [];
+    for (const pokemon of data.results) {
+      const pokemonRes = await fetch(pokemon.url);
+      const pokemonData = await pokemonRes.json();
+      allPokemonData.push(pokemonData);
+    }
+    setAllPokemonData(allPokemonData);
+  };
+
+  //1️⃣ next/load more data
+  /** next()
+   * 5️⃣fetch data from current `state.next`
+   * copy data in state `next`
+   * create new arr `newPokemonData`
+   * iterate through `data.results`
+   * each item in `data.results` fetch the url
+   * push `pokemonData` in `newPokemonData` arr
+   * 6️⃣update state `allPokemonData`
+   * spread it prevState `...allPokemonData`
+   * and spread new data `...newPokemonData`
+   * Now, `allPokemonData` should have old data AND new data
+   */
+  const next = async () => {
+    dispatch({ type: ACTION.LOADING });
+    const res = await fetch(state.next);
+    const data = await res.json();
+    dispatch({ type: ACTION.NEXT, payload: data });
+
+    const newPokemonData = [];
+    for (const pokemon of data.results) {
+      const pokemonRes = await fetch(pokemon.url);
+      const pokemonData = await pokemonRes.json();
+      newPokemonData.push(pokemonData);
+    }
+    // add new pokemon data to the old pokemon data
+    setAllPokemonData([...allPokemonData, ...newPokemonData]);
+  };
+
+  // code...
+
+  return (
+    <GlobalContext.Provider
+      value={{
+        ...state,
+        allPokemonData,
+        getPokemon,
+        next,
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
+};
+// code..
 ```
 
 ---
