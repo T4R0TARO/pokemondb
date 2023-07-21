@@ -6,6 +6,7 @@ import "../styles/AllPokeData.css";
 function PokeSearchResults() {
   const { isSearch, searchResults } = useGlobalContext();
 
+  console.log(searchResults);
   const conditionalRender = () => {
     if (!isSearch) {
       return <AllPokeData />;
@@ -36,7 +37,7 @@ function PokeSearchResults() {
                 <tr key={searchResults.id}>
                   <td className="sprite-image">
                     {searchResults.id}
-                    <img src={searchResults.sprites.front_default} alt="" />
+                    <img src={searchResults.sprites?.front_default} alt="" />
                   </td>
                   <td className="mon-name">
                     <Link to={`/pokemon/${searchResults.name}`}>
@@ -44,7 +45,7 @@ function PokeSearchResults() {
                     </Link>
                   </td>
                   <td className="types">
-                    {searchResults.types.map((type) => {
+                    {searchResults?.types?.map((type) => {
                       return (
                         <span
                           style={{
@@ -97,17 +98,19 @@ function PokeSearchResults() {
                   </td>
                   <td className="total-base-stats">
                     <strong>
-                      {searchResults.stats
-                        .map((stat) => stat.base_stat)
-                        .reduce((acc, cur) => acc + cur, 0)}
+                      {/* ! ⚠ BUG: Does not render */}
+                      {/* {searchResults?.stats
+                        ?.map((stat) => stat?.base_stat)
+                        ?.reduce((acc, cur) => acc + cur, 0)} */}
                     </strong>
                   </td>
-                  <td>{searchResults.stats[0].base_stat}</td>
+                  {/* ! ⚠ BUG: Does not render */}
+                  {/* <td>{searchResults.stats[0].base_stat}</td>
                   <td>{searchResults.stats[1].base_stat}</td>
                   <td>{searchResults.stats[2].base_stat}</td>
                   <td>{searchResults.stats[3].base_stat}</td>
                   <td>{searchResults.stats[4].base_stat}</td>
-                  <td>{searchResults.stats[5].base_stat}</td>
+                  <td>{searchResults.stats[5].base_stat}</td> */}
                 </tr>
               ) : (
                 <p>Loading...</p>
