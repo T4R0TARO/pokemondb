@@ -10,7 +10,7 @@ const GlobalContext = createContext();
 const baseUrl = "https://pokeapi.co/api/v2/";
 
 const ACTION = {
-  LAODING: "LOADING",
+  LOADING: "LOADING",
   SEARCH: "SEARCH",
   GET_ALL_POKEMON: "GET_ALL_POKEMON",
   GET_POKEMON: "GET_POKEMON",
@@ -33,6 +33,8 @@ const reducer = (state, action) => {
       return { ...state, pokemon: action.payload, loading: false };
     case ACTION.GET_POKEMON_DATABASE:
       return { ...state, pokemonDatabase: action.payload, loading: false };
+    case ACTION.SEARCH:
+      return { ...state, searchResults: action.payload, loading: false };
     case ACTION.NEXT:
       return {
         ...state,
@@ -59,6 +61,35 @@ export const GlobalContextProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const [allPokemonData, setAllPokemonData] = useState([]);
+
+  // SEARCH FORM
+  const [search, setSearch] = useState("");
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    if (e.target.value === "") {
+      state.isSearch = false;
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (search) {
+      searchPokemon(search);
+      state.isSearch = true;
+    } else {
+      state.isSearch = false;
+      alert("Please enter a search term");
+    }
+  };
+
+  const searchPokemon = async (name) => {
+    dispatch({ type: ACTION.LOADING });
+    const res = await fetch(`${baseUrl}pokemon/${name}`);
+    const data = await res.json();
+    dispatch({ type: ACTION.SEARCH, payload: data });
+  };
+  //
 
   // get all pokemon
   const getAllPokemon = async () => {
@@ -122,6 +153,9 @@ export const GlobalContextProvider = ({ children }) => {
         allPokemonData,
         getPokemon,
         next,
+        search,
+        handleChange,
+        handleSubmit,
       }}
     >
       {children}

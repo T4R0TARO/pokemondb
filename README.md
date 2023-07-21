@@ -186,19 +186,19 @@ function Pokemon() {
 data
 
 ```json
--   count:1281
--   next:"https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20" 👈
--   previous:null
--   results: [] 20 items
+   count:1281
+   next:"https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20" 👈
+   previous:null
+   results: [] 20 items
 ```
 
 next data
 
 ```json
--   count:1281
--   next:"https://pokeapi.co/api/v2/pokemon/?offset=60&limit=20" 👈
--   previous:"https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20"
--   results: [] 20 items
+   count:1281
+   next:"https://pokeapi.co/api/v2/pokemon/?offset=60&limit=20" 👈
+   previous:"https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20"
+   results: [] 20 items
 ```
 
 ```jsx
@@ -313,3 +313,22 @@ export const GlobalContextProvider = ({ children }) => {
 ```
 
 ---
+
+### Links
+
+- Solution URL: [Git Repo](https://github.com/T4R0TARO/pokemondb)
+- Live Site URL: [Git Pages](https://t4r0taro.github.io/pokemondb/)
+
+### Built with
+
+- HTML
+- CSS
+- JS
+- REACT
+- REACT-ROUTER-DOM
+- VITE
+
+## Author
+
+- Website - [Joshua Manansala](https://github.com/T4R0TARO)
+- Twitter - [@taro_code](https://twitter.com/taro_code)
