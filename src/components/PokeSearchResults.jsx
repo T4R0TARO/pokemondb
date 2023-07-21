@@ -6,7 +6,7 @@ import "../styles/AllPokeData.css";
 function PokeSearchResults() {
   const { isSearch, searchResults } = useGlobalContext();
 
-  console.log(searchResults);
+  // console.log(searchResults);
   const conditionalRender = () => {
     if (!isSearch) {
       return <AllPokeData />;
@@ -99,18 +99,21 @@ function PokeSearchResults() {
                   <td className="total-base-stats">
                     <strong>
                       {/* ! ⚠ BUG: Does not render */}
-                      {/* {searchResults?.stats
+                      {searchResults.stats
                         ?.map((stat) => stat?.base_stat)
-                        ?.reduce((acc, cur) => acc + cur, 0)} */}
+                        .reduce((acc, cur) => acc + cur, 0)}
                     </strong>
                   </td>
                   {/* ! ⚠ BUG: Does not render */}
-                  {/* <td>{searchResults.stats[0].base_stat}</td>
-                  <td>{searchResults.stats[1].base_stat}</td>
-                  <td>{searchResults.stats[2].base_stat}</td>
-                  <td>{searchResults.stats[3].base_stat}</td>
-                  <td>{searchResults.stats[4].base_stat}</td>
-                  <td>{searchResults.stats[5].base_stat}</td> */}
+                  {/* <td>{searchResults.stats[0]?.base_stat}</td>
+                  <td>{searchResults.stats[1]?.base_stat}</td>
+                  <td>{searchResults.stats[2]?.base_stat}</td>
+                  <td>{searchResults.stats[3]?.base_stat}</td>
+                  <td>{searchResults.stats[4]?.base_stat}</td>
+                  <td>{searchResults.stats[5]?.base_stat}</td> */}
+                  {searchResults.stats?.map((stat) => {
+                    return <td key={stat.stat?.name}>{stat?.base_stat}</td>;
+                  })}
                 </tr>
               ) : (
                 <p>Loading...</p>
