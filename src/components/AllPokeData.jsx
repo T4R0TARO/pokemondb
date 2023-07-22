@@ -1,5 +1,6 @@
 import { useGlobalContext } from "../context/Global";
 import { Link } from "react-router-dom";
+import Loader from "./Loader";
 import "../styles/AllPokeData.css";
 
 function AllPokeData() {
@@ -107,7 +108,7 @@ function AllPokeData() {
               );
             })
           ) : (
-            <span>Loading...</span>
+            <Loader />
           )}
         </tbody>
       </table>

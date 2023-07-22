@@ -1,9 +1,10 @@
 import PokeSearchResults from "./PokeSearchResults";
 import { useGlobalContext } from "../context/Global";
+import Loader from "./Loader";
 import "../styles/Homepage.css";
 
 function Homepage() {
-  const { search, handleChange, handleSubmit } = useGlobalContext();
+  const { search, handleChange, handleSubmit, loading } = useGlobalContext();
 
   return (
     <main className="Homepage">
@@ -21,8 +22,8 @@ function Homepage() {
           </button>
         </div>
       </form>
-      {/* <AllPokeData /> */}
-      <PokeSearchResults />
+      {/* <PokeSearchResults /> */}
+      {loading ? <Loader /> : <PokeSearchResults />}
     </main>
   );
 }

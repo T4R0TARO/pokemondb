@@ -1,12 +1,12 @@
 import { useGlobalContext } from "../context/Global";
 import AllPokeData from "./AllPokeData.jsx";
+import Loader from "./Loader";
 import { Link } from "react-router-dom";
 import "../styles/AllPokeData.css";
 
 function PokeSearchResults() {
-  const { isSearch, searchResults } = useGlobalContext();
+  const { isSearch, searchResults, loading } = useGlobalContext();
 
-  // console.log(searchResults);
   const conditionalRender = () => {
     if (!isSearch) {
       return <AllPokeData />;
@@ -98,25 +98,17 @@ function PokeSearchResults() {
                   </td>
                   <td className="total-base-stats">
                     <strong>
-                      {/* ! ⚠ BUG: Does not render */}
                       {searchResults.stats
                         ?.map((stat) => stat?.base_stat)
                         .reduce((acc, cur) => acc + cur, 0)}
                     </strong>
                   </td>
-                  {/* ! ⚠ BUG: Does not render */}
-                  {/* <td>{searchResults.stats[0]?.base_stat}</td>
-                  <td>{searchResults.stats[1]?.base_stat}</td>
-                  <td>{searchResults.stats[2]?.base_stat}</td>
-                  <td>{searchResults.stats[3]?.base_stat}</td>
-                  <td>{searchResults.stats[4]?.base_stat}</td>
-                  <td>{searchResults.stats[5]?.base_stat}</td> */}
                   {searchResults.stats?.map((stat) => {
                     return <td key={stat.stat?.name}>{stat?.base_stat}</td>;
                   })}
                 </tr>
               ) : (
-                <p>Loading...</p>
+                <Loader />
               )}
             </tbody>
           </table>
@@ -127,7 +119,8 @@ function PokeSearchResults() {
 
   return (
     <div className="search-results-container AllPokemonData">
-      {conditionalRender()}
+      {/* {conditionalRender()} */}
+      {loading ? <Loader /> : conditionalRender()}
     </div>
   );
 }
