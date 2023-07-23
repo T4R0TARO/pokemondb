@@ -19,6 +19,17 @@ form span {
 form input {
   padding: 0.7rem 1.2rem;
 }
+
+@media (max-width: 380px) {
+  form input {
+    padding: 0.7rem 0.9rem;
+  }
+
+  form .input-control span {
+    font-size: 1rem;
+  }
+}
+
 .input-control {
   display: flex;
   flex-direction: row;
