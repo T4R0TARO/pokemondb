@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "../styles/AllPokeData.css";
 
 function PokeSearchResults() {
-  const { isSearch, searchResults, loading } = useGlobalContext();
+  const { isSearch, searchResults } = useGlobalContext();
 
   const conditionalRender = () => {
     if (!isSearch) {
@@ -120,7 +120,6 @@ function PokeSearchResults() {
   return (
     <div className="search-results-container AllPokemonData">
       {conditionalRender()}
-      {/* {loading ? <Loader /> : conditionalRender()} */}
     </div>
   );
 }
