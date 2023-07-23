@@ -119,8 +119,8 @@ function PokeSearchResults() {
 
   return (
     <div className="search-results-container AllPokemonData">
-      {/* {conditionalRender()} */}
-      {loading ? <Loader /> : conditionalRender()}
+      {conditionalRender()}
+      {/* {loading ? <Loader /> : conditionalRender()} */}
     </div>
   );
 }
